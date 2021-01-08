@@ -1,3 +1,17 @@
+Trabalho em desenvolvimento.
+
+Teste de uma API para consumir dados de voos e gerar um agrupamento desses voos de maneira ordenada.
+
+O trabalho está sendo desenvolvido em framework Lumen 8, utilizando o Atom como editor de código.
+
+O servidor utilizado é o próprio servidor que o PHP disponibiliza. Para isso é necessário o comando em terminal:
+
+php -S localhost:(Porta) -t public.
+
+A versão do PHP é a 7.4.
+
+Para acessar o projeto basta acessar localhost:(porta)/api/index
+
 # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)

@@ -22,11 +22,11 @@ class ExampleController extends Controller
     curl_close($ch); //Encerra a conexão
 
     $retorno = json_decode($retorno); //Ajuda a ser lido mais rapidamente
-    $this->keys($retorno);
+    $this->chaves($retorno);
     //return $retorno;
   }
 
-  public function keys($array){//função para gerar indices baseados nos tipos de tarifas
+  public function chaves($array){//função para gerar indices baseados nos tipos de tarifas
 
     $voos = $array; //transfere o array recebido para uma variavel mais facil de enxergar
     $chaves_tarifas = []; // cria um array para fazer as chaves
@@ -38,9 +38,6 @@ class ExampleController extends Controller
       $chaves_tarifas[$tarifa->fare][] = $tarifa;
     }
     $this->agrupamentos($chaves_tarifas);
-    /*print "<pre>";
-    print_r($chaves_tarifas);
-    print "</pre>";*/
   }
 
   public function agrupamentos($array){
@@ -49,41 +46,42 @@ class ExampleController extends Controller
     $agrupamentos = [];
     $valorTotal = 0;
 
-    $i = 0;
+
     foreach ($voos as $tarifa) {// percorrer os voos separados por tarifas
       $voosVolta = [];
       $voosIda = [];
       foreach ($tarifa as $data) {//percorrer os voos
         $tipoTarifa = $data->fare;
 
-        if (!isset($agrupamentos["$data->fare - $i"])) {
-          $agrupamentos["$data->fare - $i"] = [];
+        if (!isset($agrupamentos["$data->fare"])) {
+          $agrupamentos["$data->fare"] = [];
 
         }
         if($data->outbound == 1 && $data->fare == "$tipoTarifa") {
-
           $valorTotal += $data->price;
           $voosIda[] = $data->id;
-        }elseif ($data->inbound == 1 && $data->fare == "$tipoTarifa") {
-
+        }if($data->inbound == 1 && $data->fare == "$tipoTarifa") {
           $valorTotal += $data->price;
           $voosVolta[] = $data->id;
         }
-
-        $grupo = array('valor total' => $valorTotal,
-        'Voos ida' => $voosIda,
-        'Voos Volta' => $voosVolta);
-        $agrupamentos["$data->fare - $i"][] = $grupo;
-
-
         }
+        $grupo = array('valor total' => $valorTotal,
+        'ida' => $voosIda,
+        'volta' => $voosVolta);
+        $agrupamentos["$data->fare"] = $grupo;
 
-        $i++;
+
       }
 
-    print "<pre>";
-    print_r($agrupamentos);
-    print "</pre>";
+
+    $retorno = array('flights:' => $voos,
+    'groups:' => $agrupamentos,
+    'totalGroups' => "",
+    'totalFlights' => "",
+    'cheapestPrice' => "",
+    'cheapestGroup' => "");
+    header('Content-Type: application/json');
+    echo json_encode($retorno);
 
   }
   //

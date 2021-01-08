@@ -1,0 +1,24 @@
+A ideia do projeto é consumir uma API que retorna um array com vários voos.
+
+Cada voo também é um array, e sendo assim é necessário manipular corretamente os arrays
+para alcançar os agrupamentos.
+
+O primeiro passo foi utilizar um meio do PHP para poder transformar o JSON retornado pela API
+em um array manipulável. Para isso foi utilizado a biblioteca cURL, que nos permite acessar uma
+API ou um WS. Após receber o retorno, é necessário decodificar para um objeto manipulavel do PHP
+e foi utilizado o método "json_decode".
+
+Com estas etapas prontas, o próximo passo é manipular o array para gerar os agrupamentos seguindo
+as regras de agrupamento.
+
+Todo controle e manipulação é feito no ExampleController, onde a função index utiliza o cURL para
+criar o array em PHP. Então, ela passa este array para um outra função, "CHAVES", que gera indices
+no array baseado no tipo de tarifa(fare). Esta etapa organiza o array deixando os voos agrupados
+pelo tipo de tarifa.
+
+A partir daí, este novo array ordenado passa para a função "AGRUPAMENTOS" que irá percorrê-lo e
+criar os grupos com voos de ida e volta, que tenham o mesmo tipo de tarifa e fará a soma dos
+valores.
+
+O objetivo é criar todas as combinações possíveis de grupos de voos de ida e volta e retornar em
+formato JSON as informações.
